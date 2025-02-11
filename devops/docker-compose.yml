@@ -1,0 +1,25 @@
+services:
+  api-backend:
+    build: ../backend/
+    image: api-backend
+    container_name: api-backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:///database.db
+      SECRET_KEY: 12345
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_SECONDS: 3600
+    healthcheck:
+        test: curl --fail http://localhost:8000/health || exit 1
+        interval: 5s
+        timeout: 5s
+        retries: 10
+  site-frontend:
+    build: ../frontend/
+    image: site-frontend
+    container_name: site-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:8000

@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
-import qs from 'qs';
 import Button from "../../components/Button";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 
+
 const LoginPage: React.FC = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const data = qs.stringify({
+    const data = {
       username: email,
       password: password,
-    });
+    };
     try {
-      const response = await axios.post("http://127.0.0.1:8000/auth/jwt/login", data, {
+      const response = await axios.post(apiUrl+"/auth/jwt/login", data, {
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -31,7 +32,7 @@ const LoginPage: React.FC = () => {
 
 
 
-      const profileResponse = await axios.get("http://127.0.0.1:8000/users/me", {
+      const profileResponse = await axios.get(apiUrl+"/users/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         }
